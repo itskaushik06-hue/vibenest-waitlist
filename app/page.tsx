@@ -1,65 +1,162 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import {
+  Coffee,
+  Dumbbell,
+  Footprints,
+  Film
+} from 'lucide-react'
 
 export default function Home() {
+  const [email, setEmail] = useState('')
+  const [city, setCity] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'success' | 'exists' | 'error'>('idle')
+
+  async function joinWaitlist() {
+    if (!email) return
+
+    setLoading(true)
+    setStatus('idle')
+
+    const { error } = await supabase
+      .from('waitlist')
+      .insert([{ email, city }])
+
+    if (error) {
+      if (error.code === '23505') {
+        setStatus('exists')
+      } else {
+        setStatus('error')
+      }
+    } else {
+      setStatus('success')
+      setEmail('')
+      setCity('')
+    }
+
+    setLoading(false)
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="min-h-screen bg-pattern flex flex-col items-center px-4 py-12 sm:py-16 gap-16">
+
+      {/* HERO */}
+      <section className="w-full max-w-xl">
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 text-center shadow-sm">
+          <h1 className="brand text-3xl sm:text-4xl font-bold mb-3">
+            VibeNest
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="text-sm sm:text-base text-[var(--color-muted)]">
+            Meet people the way it actually happens.
+            <br />
+            Real time. Real activities.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* ACTIVITIES */}
+      <section className="w-full max-w-xl text-center">
+        <h2 className="brand text-lg font-semibold mb-6">
+          Meet over what you actually want to do
+        </h2>
+
+        <div className="grid grid-cols-2 gap-6">
+          <IconItem icon={<Coffee size={18} />} label="Food" />
+          <IconItem icon={<Dumbbell size={18} />} label="Sports" />
+          <IconItem icon={<Footprints size={18} />} label="Walks" />
+          <IconItem icon={<Film size={18} />} label="Movies" />
         </div>
-      </main>
+      </section>
+
+      {/* WHY */}
+      <section className="w-full max-w-xl">
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 text-center">
+          <h3 className="brand text-lg font-semibold mb-3">
+            This is how real socialising happens
+          </h3>
+
+          <p className="text-sm text-[var(--color-muted)] leading-relaxed">
+            You talk before you meet. You understand the vibe.
+            No swiping. No pressure to impress.
+            Just people meeting around shared intent.
+          </p>
+        </div>
+      </section>
+
+      {/* WAITLIST */}
+      <section className="w-full max-w-xl">
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm">
+          <h4 className="brand text-base font-semibold mb-1 text-center">
+            Be the first to know
+          </h4>
+
+          <p className="text-xs text-[var(--color-muted)] mb-5 text-center">
+            We’re launching city by city.
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <input
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="rounded-lg border border-[var(--color-border)] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+            />
+
+            <input
+              type="text"
+              placeholder="Your city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className="rounded-lg border border-[var(--color-border)] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+            />
+
+            <button
+              onClick={joinWaitlist}
+              disabled={loading}
+              className="rounded-xl bg-[var(--color-accent)] py-3 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
+            >
+              {loading ? 'Joining…' : 'Join the waitlist'}
+            </button>
+
+            {status === 'success' && (
+              <p className="text-xs text-green-600 text-center mt-2">
+                You’re on the list ✨
+              </p>
+            )}
+
+            {status === 'exists' && (
+              <p className="text-xs text-[var(--color-muted)] text-center mt-2">
+                You’re already on the list 👀
+              </p>
+            )}
+
+            {status === 'error' && (
+              <p className="text-xs text-red-600 text-center mt-2">
+                Something went wrong. Try again.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+    </main>
+  )
+}
+
+function IconItem({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="w-10 h-10 rounded-full border border-[var(--color-border)] flex items-center justify-center">
+        {icon}
+      </div>
+      <span className="text-xs text-[var(--color-muted)]">
+        {label}
+      </span>
     </div>
-  );
+  )
 }
