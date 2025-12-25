@@ -1,15 +1,10 @@
 import './globals.css'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
+  weight: ['400', '500', '700'],
   variable: '--font-body',
-  display: 'swap',
-})
-
-const grotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-brand',
   display: 'swap',
 })
 
@@ -20,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${grotesk.variable}`}>
+      <body className={dmSans.variable}>
         {children}
       </body>
     </html>

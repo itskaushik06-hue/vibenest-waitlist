@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-pattern flex flex-col items-center px-4 py-10 gap-12">
+    <main className="min-h-screen bg-pattern flex flex-col items-center px-4 py-8 gap-10">
 
       {/* HERO */}
       <section className="w-full max-w-xl">
@@ -51,10 +51,10 @@ export default function Home() {
             VibeNest
           </h1>
 
-          <p className="text-sm text-[var(--color-muted)]">
-            Create or join real-time plans around food, sports, walks, and movies.
+          <p className="text-sm text-[var(--color-muted)] leading-relaxed">
+            Create or join real time plans with people nearby.
             <br />
-            Meet people through what you want to do — not endless profiles.
+            Meet people through shared intent, not endless profiles.
           </p>
         </div>
       </section>
@@ -66,14 +66,14 @@ export default function Home() {
         </h2>
 
         <div className="grid grid-cols-2 gap-5">
-          <IconItem icon={<Coffee size={18} />} label="Food" />
-          <IconItem icon={<Dumbbell size={18} />} label="Sports" />
-          <IconItem icon={<Footprints size={18} />} label="Walks" />
-          <IconItem icon={<Film size={18} />} label="Movies" />
+          <IconItem icon={<Coffee size={22} />} label="Food" />
+          <IconItem icon={<Dumbbell size={22} />} label="Sports" />
+          <IconItem icon={<Footprints size={22} />} label="Walks" />
+          <IconItem icon={<Film size={22} />} label="Movies" />
         </div>
       </section>
 
-      {/* WHAT IT IS */}
+      {/* HOW IT WORKS */}
       <section className="w-full max-w-xl">
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 text-center">
           <h3 className="brand text-base font-semibold mb-2">
@@ -82,10 +82,10 @@ export default function Home() {
 
           <p className="text-sm text-[var(--color-muted)] leading-relaxed">
             VibeNest helps you discover people nearby who want to do the same
-            things as you — now or soon.
+            things as you, now or soon.
             <br /><br />
-            Instead of swiping on profiles, you join or create real-world plans,
-            see who’s coming, and decide if it feels right.
+            Instead of swiping on profiles, you join or create real world plans,
+            see who is interested, and decide if it feels right.
           </p>
         </div>
       </section>
@@ -126,20 +126,25 @@ export default function Home() {
               {loading ? 'Joining…' : 'Join the waitlist'}
             </button>
 
+            {/* TRUST MICRO-COPY */}
+            <p className="text-[11px] text-[var(--color-muted)] text-center">
+              No spam. Just launch updates.
+            </p>
+
             {status === 'success' && (
-              <p className="text-xs text-green-600 text-center mt-2">
+              <p className="text-xs text-green-600 text-center mt-1">
                 You’re on the list ✨
               </p>
             )}
 
             {status === 'exists' && (
-              <p className="text-xs text-[var(--color-muted)] text-center mt-2">
+              <p className="text-xs text-[var(--color-muted)] text-center mt-1">
                 You’re already on the list 👀
               </p>
             )}
 
             {status === 'error' && (
-              <p className="text-xs text-red-600 text-center mt-2">
+              <p className="text-xs text-red-600 text-center mt-1">
                 Something went wrong. Try again.
               </p>
             )}
@@ -148,7 +153,7 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="text-xs text-[var(--color-muted)] mt-4">
+      <footer className="text-xs text-[var(--color-muted)] mt-2">
         © 2026 VibeNest. All rights reserved.
       </footer>
 
@@ -165,7 +170,7 @@ function IconItem({
 }) {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="w-10 h-10 rounded-full border border-[var(--color-border)] flex items-center justify-center">
+      <div className="w-11 h-11 rounded-full border border-[var(--color-border)] flex items-center justify-center">
         {icon}
       </div>
       <span className="text-xs text-[var(--color-muted)]">
