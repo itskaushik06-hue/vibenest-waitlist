@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import {
   Coffee,
-  BowlingPin,
+  Dumbbell,
   Footprints,
   Film
 } from 'lucide-react'
@@ -67,7 +67,7 @@ export default function Home() {
 
         <div className="grid grid-cols-2 gap-5">
           <IconItem icon={<Coffee size={18} />} label="Food" />
-          <IconItem icon={<BowlingPin size={18} />} label="Sports" />
+          <IconItem icon={<Dumbbell size={18} />} label="Sports" />
           <IconItem icon={<Footprints size={18} />} label="Walks" />
           <IconItem icon={<Film size={18} />} label="Movies" />
         </div>
