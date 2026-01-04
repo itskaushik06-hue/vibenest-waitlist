@@ -6,7 +6,9 @@ import {
   Coffee,
   Dumbbell,
   Footprints,
-  Film
+  Film,
+  Instagram,
+  Users
 } from 'lucide-react'
 
 export default function Home() {
@@ -17,14 +19,17 @@ export default function Home() {
     useState<'idle' | 'success' | 'exists' | 'error'>('idle')
 
   async function joinWaitlist() {
-    if (!email) return
+    if (!email || !city) {
+      setStatus('error')
+      return
+    }
 
     setLoading(true)
     setStatus('idle')
 
     const { error } = await supabase
       .from('waitlist')
-      .insert([{ email, city }])
+      .insert([{ email, city: city.trim() }])
 
     if (error) {
       if (error.code === '23505') {
@@ -51,11 +56,19 @@ export default function Home() {
             VibeNest
           </h1>
 
-          <p className="text-sm text-[var(--color-muted)] leading-relaxed">
+          <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-4">
             Create or join real time plans with people nearby.
             <br />
             Meet people through shared intent, not endless profiles.
           </p>
+
+          {/* STATIC SOCIAL PROOF */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 rounded-full">
+            <Users size={14} className="text-[var(--color-accent)]" />
+            <span className="text-xs font-medium text-[var(--color-accent)]">
+              100+ people on the waitlist
+            </span>
+          </div>
         </div>
       </section>
 
@@ -112,7 +125,7 @@ export default function Home() {
 
             <input
               type="text"
-              placeholder="Your city"
+              placeholder="Your city (e.g. Hyderabad)"
               value={city}
               onChange={(e) => setCity(e.target.value)}
               className="rounded-lg border border-[var(--color-border)] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
@@ -120,41 +133,62 @@ export default function Home() {
 
             <button
               onClick={joinWaitlist}
-              disabled={loading}
-              className="rounded-xl bg-[var(--color-accent)] py-3 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
+              disabled={loading || !email || !city}
+              className="rounded-xl bg-[var(--color-accent)] py-3 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-opacity"
             >
               {loading ? 'Joining…' : 'Join the waitlist'}
             </button>
 
-            {/* TRUST MICRO-COPY */}
-            <p className="text-[11px] text-[var(--color-muted)] text-center">
-              No spam. Just launch updates.
-            </p>
-
             {status === 'success' && (
-              <p className="text-xs text-green-600 text-center mt-1">
-                You’re on the list ✨
+              <p className="text-sm text-green-700 text-center bg-green-50 py-2 rounded-lg">
+                You’re on the list
               </p>
             )}
 
             {status === 'exists' && (
-              <p className="text-xs text-[var(--color-muted)] text-center mt-1">
-                You’re already on the list 👀
+              <p className="text-xs text-[var(--color-muted)] text-center bg-gray-50 py-2 rounded-lg">
+                You’re already on the list
               </p>
             )}
 
             {status === 'error' && (
-              <p className="text-xs text-red-600 text-center mt-1">
-                Something went wrong. Try again.
+              <p className="text-xs text-red-600 text-center bg-red-50 py-2 rounded-lg">
+                Please fill in all fields
               </p>
             )}
+
+            <p className="text-[11px] text-[var(--color-muted)] text-center">
+              No spam. Just launch updates when we go live in your city.
+            </p>
           </div>
         </div>
       </section>
 
+      {/* INSTAGRAM CTA */}
+      <section className="w-full max-w-xl">
+        <a
+          href="https://www.instagram.com/vibenestapp/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 bg-white border border-[var(--color-border)] rounded-xl p-4 shadow-sm hover:border-[var(--color-accent)] transition-colors group"
+        >
+          <Instagram
+            size={20}
+            className="text-[var(--color-accent)] group-hover:scale-110 transition-transform"
+          />
+          <span className="text-sm font-medium text-[var(--color-text)]">
+            Follow us on Instagram
+          </span>
+          <span className="text-xs text-[var(--color-muted)]">
+            @vibenestapp
+          </span>
+        </a>
+      </section>
+
       {/* FOOTER */}
-      <footer className="text-xs text-[var(--color-muted)] mt-2">
-        © 2026 VibeNest. All rights reserved.
+      <footer className="text-xs text-[var(--color-muted)] mt-2 text-center">
+        <p>© 2025 VibeNest. All rights reserved.</p>
+        <p className="mt-1">Made with love in Hyderabad</p>
       </footer>
 
     </main>
@@ -170,7 +204,7 @@ function IconItem({
 }) {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="w-11 h-11 rounded-full border border-[var(--color-border)] flex items-center justify-center">
+      <div className="w-11 h-11 rounded-full border border-[var(--color-border)] flex items-center justify-center bg-white">
         {icon}
       </div>
       <span className="text-xs text-[var(--color-muted)]">
